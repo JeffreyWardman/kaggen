@@ -1,0 +1,7 @@
+target_column: TARGET CSV COLUMN [str]
+data_type: DATA TYPE [str]
+
+image:
+  width: WIDTH [int]
+  height: HEIGHT [int]
+  depth: DEPTH [int]

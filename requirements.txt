@@ -1,0 +1,14 @@
+tensorflow==2.2.0
+matplotlib==3.2.2
+pandas==0.25.3
+numpy==1.19.0
+torch==1.6.0
+pydub==0.24.1
+torchvision==0.7.0
+tqdm==4.48.0
+warmup_scheduler==0.3.2
+efficientnet_pytorch==0.6.3
+sphinx_rtd_theme==0.5.0
+wandb==0.9.4
+PyYAML==5.3.1
+scikit_learn==0.23.2

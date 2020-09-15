@@ -1,0 +1,5 @@
+augmentation:
+  module_name: MODULE NAME [str]
+  types:
+    AUGMENTATION_TYPE:
+      PARAMETER: VALUE

@@ -1,0 +1,5 @@
+model:
+  module: MODULE NAME [str]
+  name: MODEL NAME [str]
+  params:
+    PARAMETER: VALUE

@@ -1,0 +1,4 @@
+train_data_path: DATA PATH [str]
+train_csv_path: CSV PATH [str]
+checkpoint_path: CHECKPOINT PATH [str]
+save_path: MODEL SAVE PATH [str]

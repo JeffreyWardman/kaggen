@@ -1,0 +1,38 @@
+FROM:
+  - configs/paths.yaml
+  - configs/augment.yaml
+  - configs/data.yaml
+  - configs/model.yaml
+
+seed: SEED [int]
+num_workers: NUM WORKERS [int]
+fold_idx: FOLD INDEX [int]
+num_folds: NUMBER OF FOLDS [int]
+num_epochs: NUMBER OF EPOCHS [int]
+batch_size: BATCH SIZE [int]
+train_pct: TRAIN PERCENTAGE [float]
+lr:
+  initial: INITIAL LEARNING RATE [float]
+  warmup_factor: WARMUP FACTOR [float]
+  warmup_epoch: WARMUP EPOCH [int]
+  weight_decay: WEIGHT DECAY [float]
+
+loss_func:
+  module: MODULE NAME [str]
+  function: FUNCTION NAME [str]
+
+optimizer:
+  module: MODULE NAME [str]
+  name: OPTIMIZER NAME [str]
+
+scheduler:
+  module: MODULE NAME [str]
+  name: SCHEDULER NAME [str]
+
+performance_metric_name: PERFORMANCE METRIC NAME [str]
+metrics:
+  METRIC NAME:
+    module: MODULE NAME [str]
+    name: METRIC NAME [str]
+    parameters:
+      PARAMETER: VALUE
