@@ -1,55 +1,58 @@
+import collections
+import importlib
 import logging
 import os
 import random
-from typing import Any, Dict, Union
+from copy import deepcopy
+from typing import Any, Dict, Tuple, Union
 
 import numpy as np
+import pytorch_lightning as pl
 import torch
 import wandb
 import yaml
+from PIL import Image
+from torch import nn
 
 
-def set_seed(seed: int = 0) -> None:
-    """Sets random seed
-
-    Keyword Arguments:
-        seed {int} -- Seed value (default: {0})
-    """
-    np.random.seed(seed)
-    random.seed(seed)
-    os.environ["PYTHONHASHSEED"] = str(seed)
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = True
+def load_func(module_name: str, func_name: str, call_function: bool = True, kwargs: Dict[str, Any] = None):
+    func = getattr(importlib.import_module(module_name), func_name)
+    if call_function:
+        return func(**kwargs) if kwargs else func()
+    return func
 
 
-def load_config(config: Union[str, Dict], inheritance_key: str = 'INHERIT') -> Dict[str, Any]:
+def load_config(config_path: str, inheritance_key: str = 'INHERIT') -> Dict[str, Any]:
     """Reads YAML configuration file with nested inheritance from other YAML files.
 
     Arguments:
-        config {Union[str, Dict]} -- Configuration path/dictionary
+        config {Dict[str, Any]} -- Configuration path
 
     Keyword Arguments:
-        inheritance_key {str} -- String used for inheritance paths (default: {'FROM'})
+        inheritance_key {str} -- String used for inheritance paths (default: {'INHERIT'})
 
     Returns:
         Dict[str, Any] -- Configuration dictionary
     """
-    if isinstance(config, str):
-        config_dict = yaml.safe_load(open(config))
-    elif isinstance(config, dict):
-        config_dict = config
+    config = yaml.safe_load(open(config_path))
+
+    def inherit_config(base_config: Dict[str, Any], inherited_config: Dict[str, Any]):
+        """https://stackoverflow.com/a/35692470"""
+        for key, value in inherited_config.items():
+            base_config_value = base_config.get(key)
+            if isinstance(value, collections.Mapping) and isinstance(base_config_value, collections.Mapping):
+                inherit_config(base_config_value, value)
     else:
-        raise ValueError(f'Expected config to be a str or dict but got {type(config)}.')
+                base_config[key] = deepcopy(value)
 
-    if inheritance_key in config_dict:
-        for yaml_file in config_dict[inheritance_key]:
-            parent_config = load_config(yaml_file, inheritance_key)
-            parent_config.update(config_dict)
-            config_dict = parent_config
+    if inheritance_key not in config:
+        return config
 
-    return config_dict
+    # Inherit other configs (overwriting existing duplicates per config)
+    for child_path in config['INHERIT']:
+        child_config = yaml.safe_load(open(child_path))
+        inherit_config(config, child_config)
+    return config
 
 
 def get_logger() -> logging.RootLogger:

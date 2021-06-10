@@ -11,11 +11,7 @@
 
 Kaggen is a light-weight, flexible Python library for quick prototyping for deep learning pipelines. The library originated from observations that notebooks in Kaggle competitions are typically based on the formatting of the first popular notebooks for training and inferencing pipelines. It's not rare for these to consist of non-production level code, (e.g. variables whose meaning is unclear).
 
-The idea of this library is for it to be forked and used as the basis for these pipelines, with good software engineering principles already incorporated in the baseline. Basic changes can be done simply via the YAML config files, and various external resources can be included. More detailed changes can be done by forking and tweaking the code.
-
-By continuing to use PyTorch rather than high-level API wrappers, users remain flexible in their approaches.
-
-<!-- Tutorials, code examples, and the API reference are available at the documentation website which is [available here.](# TODO documentation website) -->
+The idea of this library is for it to be forked and used as the basis for these pipelines, allowing users to remain flexible in their approaches whilst maintaining good software engineering principles. Basic changes can be done simply via the YAML config files, and various external resources can be included. More detailed changes can be done by forking and tweaking the code.
 
 # Features
 
@@ -23,16 +19,11 @@ Kaggen allows preprocessing, training and inference pipelines to be generated (c
 
 ### Coming Soon
 
-- Python script to Jupyter notebook
-  - Accommmodate for tqdm vs tqdm_notebook
-- Configs stored in experiments.xlsx with changes highlighted between experiments
-- Connect with Weights & Biases
+- Convert python script/s to Jupyter notebook
 - Custom models with shape determined from YAML file.
   - PyTorch model -> YAML file
   - External resources for layers
 - Segmentation and other problems out-of-the-box
-- GUI for non-programmers
-- Automatic mixed precision
 - Submit directly to Kaggle
 
 # Installation
@@ -43,7 +34,18 @@ Install kaggen from PyPI with pip:
 $ pip install kaggen
 ```
 
-**Note: Requires python 3.7+**
+Or fork the repository and build on top of the library with
+
+```
+$ git clone git@github.com:JeffreyWardman/kaggen.git
+$ cd kaggen
+$ poetry install kaggen
+```
+
+**Notes:**
+
+- Requires Python 3.7+
+- Tested on Python 3.8
 
 # How to Use
 

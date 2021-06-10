@@ -1,5 +1,9 @@
-.vscode
+.vscode/
+.venv/
+data/
+dist/
+wandb/
+checkpoints/
+
 __pycache__
 *.egg-info
-
-data

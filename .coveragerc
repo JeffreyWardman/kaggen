@@ -1,0 +1,18 @@
+[run]
+omit = 
+    tests/*
+    */test*.py
+parallel = true
+
+[paths]
+source = kaggen
+
+[report]
+precision = 2
+include = kaggen/*.py
+exclude_lines = 
+    def __str__
+    pragma: no cover
+
+[html]
+directory = coverage_html_report

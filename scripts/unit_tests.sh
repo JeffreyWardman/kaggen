@@ -1,11 +1,10 @@
 #!/bin/bash
-# Run unittests
+# Run unit tests
 
-set -eo
-
-N_WORKERS=${N_TESTING_WORKERS:-1}
-
+set -euo pipefail
 export LANG=en_AU.utf8
 
-pip install -r requirements.txt
-pytest -n=${N_WORKERS} -v
+python3 -m pip install -r requirements.txt
+black --check .
+isort --check .
+pytest --dead-fixtures -v

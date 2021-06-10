@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "kaggen"
+version = "0.0.0"
+description = "A flexible deep learning pipeline library."
+authors = ["Jeffrey Wardman <jeffrey.wardman@yahoo.com.au>"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+scikit-learn = "^0.24.2"
+opencv-python = "^4.5.2"
+opencv-contrib-python = "^4.5.2"
+matplotlib = "^3.4.2"
+numpy = "^1.20.3"
+pandas = "^1.2.4"
+jupyter = "^1.0.0"
+wandb = "^0.10.31"
+tqdm = "^4.61.0"
+torch = {url="https://download.pytorch.org/whl/cu111/torch-1.8.1%2Bcu111-cp38-cp38-linux_x86_64.whl"}
+# torchvision = {url="https://download.pytorch.org/whl/cu111/torchvision-0.9.1%2Bcu111-cp38-cp38-linux_x86_64.whl"}
+torchmetrics = "^0.3.2"
+omegaconf = "^2.0.6"
+pytorch-lightning = "^1.3.3"
+albumentations = "^1.0.0"
+einops = "^0.3.0"
+fire = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.5b1"
+isort = ">=4.0,<5.0" # "^5.8.0"
+pytest = "^6.2.4"
+pytest-cov = "^2.12.0"
+pytest-deadfixtures = "^2.2.1"
+poethepoet = "^0.10.0"
+pylint = "^2.8.2"
+fire = "^0.4.0"
+bandit = "^1.7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+multi_line_output=3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line-length = 120
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+^/(
+  (
+    \.eggs
+    | \.git
+    | build
+    | dist
+    | wandb
+  )
+)
+'''
+
+[tool.isort]
+line_length = 120
+profile = "black"
+src_paths = ["kaggen", "tests"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["--doctest-modules", "--cov=kaggen", "--cov-report=term-missing"]
+testpaths = ["tests"]
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+
+[tool.poe.tasks]
+install-torch = "python3 -m pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html"
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120

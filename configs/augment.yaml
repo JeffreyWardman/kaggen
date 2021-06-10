@@ -1,5 +1,0 @@
-augmentations:
-  module_name: torchvision.transforms
-  types:
-    ToTensor:
-      parameters: null

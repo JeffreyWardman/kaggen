@@ -1,0 +1,110 @@
+project: CIFAR10_classification
+pretrained_path: null
+
+seed: 0
+performance_metric: val_loss
+
+checkpoint_save_path: &checkpoint_save_path checkpoints/CIFAR10
+image_size: &image_size 32
+num_classes: &num_classes 10
+num_workers: &num_workers 20
+gpus: &gpus 1
+precision: &precision 16
+num_epochs: &num_epochs 100
+num_checkpoints: 5
+
+data_module:
+  module_name: kaggen.datamodules
+  func_name: CIFAR10DataModule
+  kwargs:
+    data_dir: ~/data
+    image_shape:
+      - 3
+      - *image_size
+      - *image_size
+    label_smoothing: 0.2
+    batch_size: 1024
+    num_workers: *num_workers
+    use_collate_fn: False # True
+
+trainer: 
+  gpus: *gpus
+  precision: *precision
+  default_root_dir: *checkpoint_save_path
+  num_sanity_val_steps: 0 # -1
+  benchmark: True
+  stochastic_weight_avg: True
+
+lit_model:
+  model:
+    module_name: torchvision.models
+    func_name: resnet18
+    kwargs:
+      pretrained: False  # True
+      num_classes: *num_classes
+      
+  loss:
+    module_name: torch.nn
+    func_name: BCEWithLogitsLoss
+    kwargs: null
+
+  optimizer:
+    module_name: torch.optim
+    func_name: Adam
+    kwargs:
+      lr: 1.0e-3
+
+  scheduler:
+    module_name: torch.optim.lr_scheduler
+    func_name: ReduceLROnPlateau
+    kwargs:
+      factor: 0.1
+      verbose: True
+
+  metrics:
+    accuracy:
+      module_name: sklearn.metrics
+      func_name: accuracy_score
+      kwargs: null
+
+transforms:
+  train:
+    module_name: albumentations
+    wrapper:
+      func_name: Compose
+      kwargs: null
+    func_names:
+      - LongestMaxSize:
+          max_size: *image_size
+          interpolation: 1
+          always_apply: True
+          p: 1
+      - PadIfNeeded:
+          min_height: *image_size
+          min_width: *image_size
+      - Resize:
+          height: *image_size
+          width: *image_size
+      - HorizontalFlip: null
+      - RandomBrightnessContrast:
+          p: 0.2
+      - pytorch.transforms.ToTensorV2: null
+
+  val:
+    module_name: albumentations
+    wrapper:
+      func_name: Compose
+      kwargs: null
+    func_names:
+      - LongestMaxSize:
+          max_size: *image_size
+          interpolation: 1
+          always_apply: True
+          p: 1
+      - PadIfNeeded:
+          min_height: *image_size
+          min_width: *image_size
+      - Resize:
+          height: *image_size
+          width: *image_size
+      - pytorch.transforms.ToTensorV2: null
